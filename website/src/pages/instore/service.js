@@ -10,6 +10,19 @@ export async function query(params) {
 export async function queryToday() {
   return request(url + 'today');
 }
+export async function queryCurrentMonth() {
+  return request(url + 'current_month');
+}
+export async function queryDateRange(params) {
+  return request(url + 'date_range', {
+    params,
+  });
+}
+export async function queryMonth(params) {
+  return request(url + 'month', {
+    params,
+  });
+}
 export async function remove(params) {
   return request(url, {
     method: 'POST',

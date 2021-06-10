@@ -1,5 +1,4 @@
 from django.db.models import Q
-from django.http.response import JsonResponse
 
 import json
 
@@ -24,10 +23,8 @@ def query(req, res, serializer):
         if key not in ['current', 'pageSize', 'sorter', 'filter']:
             if value[0: 1] == '~':
                 _q.children.append((key, value.replace('~', '')))
-            else:
+            elif key[0:1] != '_':
                 q.children.append((key, value))
-
-    print(q, _q)
     res = res.filter(q & ~_q)
     if order:
         res = res.order_by(order)
@@ -39,4 +36,4 @@ def query(req, res, serializer):
         'total': total,
         'data': res
     }
-    return JsonResponse(response, safe=False)
+    return response

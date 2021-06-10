@@ -25,12 +25,33 @@ def action(request):
 
 
 def find(request):
-    return query(request, WeightMemoIn.objects.all(), WeightMemoInSerializer)
+    return JsonResponse(query(request, WeightMemoIn.objects.all(), WeightMemoInSerializer), safe=False)
 
 
 def find_today(request):
-    res = WeightMemoInSerializer(instance=WeightMemoIn.objects.all().filter(createDateTime__startswith=date.today()),
-                                 many=True).data
+    res = query(request, WeightMemoIn.objects.all().filter(createDateTime__startswith=date.today()),
+                WeightMemoInSerializer)
+    return JsonResponse(res, safe=False)
+
+
+def find_current_month(request):
+    current_month = str(date.today())[0:7]
+    res = query(request, WeightMemoIn.objects.all().filter(createDateTime__startswith=current_month),
+                WeightMemoInSerializer)
+    return JsonResponse(res, safe=False)
+
+
+def find_date_range(request):
+    date_range = request.GET.get('_date_range').split(',')
+    res = query(request, WeightMemoIn.objects.all().filter(createDateTime__range=(date_range[0], date_range[1])),
+                WeightMemoInSerializer)
+    return JsonResponse(res, safe=False)
+
+
+def find_month(request):
+    month = request.GET.get('_month')
+    res = query(request, WeightMemoIn.objects.all().filter(createDateTime__startswith=month),
+                WeightMemoInSerializer)
     return JsonResponse(res, safe=False)
 
 

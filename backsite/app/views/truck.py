@@ -2,6 +2,7 @@ import json
 
 from datetime import datetime
 from django.http import HttpResponse
+from django.http.response import JsonResponse
 from ..models.truck import Truck
 from .serializer import TruckSerializer
 from .service import query
@@ -23,7 +24,7 @@ def action(request):
 
 
 def find(request):
-    return query(request, Truck.objects.all(), TruckSerializer)
+    return JsonResponse(query(request, Truck.objects.all(), TruckSerializer), safe=False)
 
 
 def add(data):

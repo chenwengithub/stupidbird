@@ -2,6 +2,7 @@ import json
 
 from datetime import datetime
 from django.http import HttpResponse
+from django.http.response import JsonResponse
 from ..models.payment import Payment
 from .serializer import PaymentSerializer
 from .service import query
@@ -22,7 +23,7 @@ def action(request):
 
 
 def find(request):
-    return query(request, Payment.objects.all(), PaymentSerializer)
+    return JsonResponse(query(request, Payment.objects.all(), PaymentSerializer), safe=False)
 
 
 def add(data):

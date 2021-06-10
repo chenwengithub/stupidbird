@@ -13,4 +13,7 @@ urlpatterns = [
     path('api/weight_memo_out/payment', weight_memo_out.update_payment),
     path('api/weight_memo_in/', weight_memo_in.action),
     path('api/weight_memo_in/today', weight_memo_in.find_today),
+    path('api/weight_memo_in/current_month', weight_memo_in.find_current_month),
+    path('api/weight_memo_in/date_range', weight_memo_in.find_date_range),
+    path('api/weight_memo_in/month', weight_memo_in.find_month),
 ]

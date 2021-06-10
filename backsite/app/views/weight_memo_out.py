@@ -27,7 +27,7 @@ def action(request):
 
 
 def find(request):
-    return query(request, WeightMemoOut.objects.all(), WeightMemoOutSerializer)
+    return JsonResponse(query(request, WeightMemoOut.objects.all(), WeightMemoOutSerializer), safe=False)
 
 
 def add(data):

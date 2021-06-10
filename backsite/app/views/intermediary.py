@@ -2,6 +2,7 @@ import json
 
 from datetime import datetime
 from django.http import HttpResponse
+from django.http.response import JsonResponse
 from ..models.intermediary import Intermediary
 from .serializer import IntermediarySerializer
 from .service import query
@@ -22,11 +23,12 @@ def action(request):
 
 
 def find(request):
-    return query(request, Intermediary.objects.all(), IntermediarySerializer)
+    return JsonResponse(query(request, Intermediary.objects.all(), IntermediarySerializer), safe=False)
 
 
 def add(data):
-    data = Intermediary(name=data['name'], tel=data['tel'], remark=data['remark'], createDateTime=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    data = Intermediary(name=data['name'], tel=data['tel'], remark=data['remark'],
+                        createDateTime=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     data.save()
     return HttpResponse('success')
 

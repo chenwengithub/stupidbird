@@ -2,6 +2,7 @@ import json
 
 from datetime import datetime
 from django.http import HttpResponse
+from django.http.response import JsonResponse
 from ..models.steel_plant import SteelPlant
 from .serializer import SteelPlantSerializer
 from .service import query
@@ -22,7 +23,7 @@ def action(request):
 
 
 def find(request):
-    return query(request, SteelPlant.objects.all(), SteelPlantSerializer)
+    return JsonResponse(query(request, SteelPlant.objects.all(), SteelPlantSerializer), safe=False)
 
 
 def add(data):

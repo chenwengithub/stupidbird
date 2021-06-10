@@ -76,10 +76,10 @@ ASGI_APPLICATION = 'waste.asgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
     # 'default': {
     #     'ENGINE': 'django.db.backends.mysql',
     #     'NAME': 'stupidbird',
@@ -88,14 +88,14 @@ DATABASES = {
     #     'HOST': 'rm-2vc34o4u7j3l0e51rko.mysql.cn-chengdu.rds.aliyuncs.com',
     #     'PORT': '3306',
     # }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'stupidbird',
-    #     'USER': 'root',
-    #     'PASSWORD': 'chenwen',
-    #     'HOST': '127.0.0.1',
-    #     'PORT': '3306',
-    # }
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'stupidbird',
+        'USER': 'root',
+        'PASSWORD': 'chenwen',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+    }
 }
 
 # Password validation
