@@ -15,11 +15,12 @@ const InstoreModel = {
     setVisibleUpdateForm(state, { payload: { visible, current } }) {
       return { ...state, visible_update_form: visible, current };
     },
-    setToday(state, { payload }) {
-      let total = payload.length;
+    setToday(state, { payload:{data} }) {
+      console.log(data)
+      let total = data.length;
       let weight = 0;
       let paid = 0;
-      payload.forEach((item) => {
+      data.forEach((item) => {
         weight += item.legal_weight;
         paid += item.actual_payment;
       });

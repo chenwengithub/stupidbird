@@ -7,11 +7,15 @@ export async function query(params) {
     params,
   });
 }
-export async function queryToday() {
-  return request(url + 'today');
+export async function queryToday(params) {
+  return request(url + 'today', {
+    params,
+  });
 }
-export async function queryCurrentMonth() {
-  return request(url + 'current_month');
+export async function queryCurrentMonth(params) {
+  return request(url + 'current_month', {
+    params,
+  });
 }
 export async function queryDateRange(params) {
   return request(url + 'date_range', {
