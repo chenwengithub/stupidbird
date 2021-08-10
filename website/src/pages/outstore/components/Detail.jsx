@@ -5,6 +5,7 @@ import { CheckCircleOutlined } from '@ant-design/icons';
 import { WaterMark } from '@ant-design/pro-layout';
 import { setVisiblePaymentForm } from '../actions';
 import { connect } from 'umi';
+import printJS from 'print-js';
 
 const Detail = (props) => {
   const { row, setRow, dispatch } = props;
@@ -18,31 +19,49 @@ const Detail = (props) => {
       title: '出发信息',
       render: (dom, record) => {
         return (
-          <Card style={{ color: 'red' }}>
+          <Card style={{ color: 'black' }}>
             <p>目的地：{record.steel_plant.name}</p>
             <p>车牌号：{record.truck.car_number}</p>
             <p>中间人：{record.intermediary.name}</p>
-            <p>毛重：{record.gross_weight_own} 吨</p>
-            <p>皮重：{record.body_weight_own} 吨</p>
-            <p>净重：{record.legal_weight_own} 吨</p>
-            <p>暂定价格：{record.agreed_prise} 元/吨</p>
-            <p>暂定总额：{record.expected_payment_text} 元</p>
-            <p>出发日期：{record.createDateTime}</p>
+            <p>公式：{record.expected_payment_text} 元</p>
+            <p>日期：{record.createDateTime}</p>
           </Card>
         );
       },
     },
     {
-      title: '到达信息',
+      title: '磅单',
       render: (dom, record) => {
         return (
-          <Card style={{ color: 'blue' }}>
-            <p>毛重：{record.gross_weight_opposite} 吨</p>
-            <p>皮重：{record.body_weight_opposite} 吨</p>
-            <p>净重：{record.legal_weight_opposite} 吨</p>
-            <p>价格：{record.actual_prise} 元/吨</p>
-            <p>总额：{record.opposite_payment_text} 元</p>
-            <p>到达日期：{record.arrival_datetime}</p>
+          <Card style={{ color: 'blue' }}
+          extra={
+            <a
+            onClick={() => {
+              printJS({
+                printable: 'print',
+                type: 'html',
+                header: '出库磅单',
+                headerStyle: 'text-align:center;font-size:26pt;font-weight:500',
+                maxWidth: 250,
+                font_size: '14pt',
+                honorMarginPadding: false,
+                style: 'padding-bottom:30px',
+              });
+            }}
+            >
+              打印
+            </a>
+          }>
+            <div id="print">
+            <p>#{record.id}</p>
+            <p>------------------------------</p>
+            <p>车牌号：{record.truck.car_number}</p>
+            <p>毛重：{record.gross_weight_own} 吨</p>
+            <p>皮重：{record.body_weight_own} 吨</p>
+            <p>净重：{record.legal_weight_own} 吨</p>
+            <p>日期：{record.createDateTime}</p>
+            <p>------------------------------</p>
+            </div>
           </Card>
         );
       },

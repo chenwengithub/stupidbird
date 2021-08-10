@@ -5,10 +5,12 @@ import { PageContainer } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
+import Header from './components/Header';
 import OppositeForm from './components/OppositeForm';
 import PaymentForm from './components/PaymentForm';
 import Detail from './components/Detail';
 import { query } from './service';
+import styles from './style.less';
 import { connect } from 'umi';
 import {
   setVisibleCreateForm,
@@ -19,6 +21,7 @@ import {
   fetchTruck,
   fetchSteelPlant,
   fetchIntermediary,
+  fetchMonth,
 } from './actions';
 
 /**
@@ -30,7 +33,10 @@ const Index = (props) => {
   const [delLoading, setDelLoading] = useState(false);
   const actionRef = useRef();
   const [row, setRow] = useState();
-  const { dispatch } = props;
+  const {
+    dispatch,
+    outstore: { month },
+  } = props;
   const columns = [
     {
       title: '目的地',
@@ -65,7 +71,10 @@ const Index = (props) => {
         }
         return (
           <>
-            {own && (
+            <div>
+              <Tag style={{ marginBottom: '5px' }}>{own ? own + '吨' : '未知'}</Tag>
+            </div>
+            {/* {own && (
               <div>
                 <Tag style={{ marginBottom: '5px' }}>
                   预期 {own} 吨
@@ -83,7 +92,7 @@ const Index = (props) => {
                   <Tag color={diffColor}>相差 {(difference * 1000).toFixed()} kg</Tag>
                 </div>
               </div>
-            )}
+            )} */}
           </>
         );
       },
@@ -103,7 +112,10 @@ const Index = (props) => {
         }
         return (
           <>
-            {own && (
+            <div>
+              <Tag style={{}}>{own ? own + '元' : '未知'}</Tag>
+            </div>
+            {/* {own && (
               <div>
                 <Tag style={{ marginBottom: '5px' }}>
                   预期 {own} 元
@@ -121,7 +133,7 @@ const Index = (props) => {
                   <Tag color={diffColor}>相差 {difference} 元 </Tag>
                 </div>
               </div>
-            )}
+            )} */}
           </>
         );
       },
@@ -174,13 +186,23 @@ const Index = (props) => {
             break;
           case 'un_pay':
             option = (
-              <a
-                onClick={() => {
-                  dispatch(setVisiblePaymentForm({ visible: true, current: record }));
-                }}
-              >
-                收款
-              </a>
+              <>
+                <a
+                  onClick={() => {
+                    dispatch(setVisiblePaymentForm({ visible: true, current: record }));
+                  }}
+                >
+                  收款
+                </a>
+                <Divider type="vertical" />
+                <a
+                  onClick={() => {
+                    setRow(record);
+                  }}
+                >
+                  查看
+                </a>
+              </>
             );
             break;
           case 'done':
@@ -216,14 +238,13 @@ const Index = (props) => {
       valueType: 'option',
       render: (_, record) => (
         <>
-          <Button
-            type="link"
+          <a
             onClick={() => {
               dispatch(setVisibleUpdateForm({ visible: true, current: record }));
             }}
           >
             编辑
-          </Button>
+          </a>
           <Divider type="vertical" />
           <Popconfirm
             title="确定删除吗？"
@@ -231,9 +252,7 @@ const Index = (props) => {
             cancelText="否"
             onConfirm={() => handleRemove(record.id)}
           >
-            <Button type="link" danger loading={delLoading === record.key}>
-              删除
-            </Button>
+            <a style={{ color: 'red' }}>删除</a>
           </Popconfirm>
         </>
       ),
@@ -253,29 +272,39 @@ const Index = (props) => {
     dispatch(fetchTruck());
     dispatch(fetchSteelPlant());
     dispatch(fetchIntermediary());
+    dispatch(fetchMonth());
+    return () => {};
   }, []);
+
   return (
     <PageContainer>
+      <div className={styles.standardList}>
+        <Header month={month} />
+      </div>
       <ProTable
+        style={{
+          marginTop: 24,
+        }}
+        bordered
         headerTitle="出库记录"
         actionRef={actionRef}
         rowKey="id"
         search={false}
-        pagination={{ position: ['bottomRight'], pageSize: 8, showSizeChanger: false }}
-        toolBarRender={() => [
-          <Button
-            type="primary"
-            onClick={() => {
-              dispatch(setVisibleCreateForm(true));
-            }}
-          >
-            <PlusOutlined /> 手动添加
-          </Button>,
-        ]}
+        pagination={{ position: ['bottomRight'], pageSize: 20, showSizeChanger: false }}
+        // toolBarRender={() => [
+        //   <Button
+        //     type="primary"
+        //     onClick={() => {
+        //       dispatch(setVisibleCreateForm(true));
+        //     }}
+        //   >
+        //     <PlusOutlined /> 手动添加
+        //   </Button>,
+        // ]}
         request={(params, sorter, filter) => query({ ...params, sorter, filter })}
         columns={columns}
       />
-      <CreateForm actionRef={actionRef} />
+      {/* <CreateForm actionRef={actionRef} /> */}
       <UpdateForm actionRef={actionRef} />
       <OppositeForm actionRef={actionRef} />
       <PaymentForm actionRef={actionRef} />

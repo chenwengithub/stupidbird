@@ -11,7 +11,6 @@ import Detail from './components/Detail';
 import { query, queryToday, queryCurrentMonth, queryDateRange, queryMonth } from './service';
 import { setVisibleCreateForm, setVisibleUpdateForm, fetchToday, submit } from './actions';
 import styles from './style.less';
-import { arrayOf } from 'prop-types';
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
@@ -19,7 +18,6 @@ const Index = (props) => {
   const actionRef = useRef();
   const [row, setRow] = useState();
   const addBtn = useRef(null);
-  const [delLoading, setDelLoading] = useState(false);
   disabled_month;
   const [status, setStatus] = useState('today');
   const [disabled_month, setDisabledMonth] = useState(true);
@@ -32,51 +30,49 @@ const Index = (props) => {
   } = props;
   const columns = [
     {
-      title: '公式',
-      dataIndex: 'account_payable_text',
+      title: '净重（公斤）',
+      dataIndex: 'legal_weight',
+      sorter: true,
       render: (dom, entity) => {
-        return (
-          <Tag
-            style={{
-              fontSize: '20px',
-              color: 'red',
-              lineHeight: 'inherit',
-            }}
-            onClick={() => {
-              setRow(entity);
-            }}
-          >
-            {dom} 元
-          </Tag>
-        );
+        return <div style={{ fontSize: '20px' }}>{dom}</div>;
       },
     },
     {
-      title: '净重',
-      dataIndex: 'legal_weight',
-      sorter: true,
-      renderText: (val) => `${val} kg`,
-    },
-    {
-      title: '价格',
+      title: '价格（元/公斤）',
       dataIndex: 'legal_prise',
       sorter: true,
-      renderText: (val) => `${val} 元/kg`,
+      render: (dom, entity) => {
+        return <div style={{ fontSize: '20px' }}>{dom}</div>;
+      },
+    },
+    {
+      title: '金额',
+      dataIndex: 'account_payable',
+      render: (dom, entity) => {
+        return <div style={{ fontSize: '24px' }}>{dom} 元</div>;
+      },
     },
     {
       title: '状态',
       dataIndex: 'status',
       sorter: true,
       hideInForm: true,
-      valueEnum: {
-        done: {
-          text: '完成',
-          status: 'Success',
-        },
-        un_pay: {
-          text: '未付清',
-          status: 'Error',
-        },
+      render: (value, record) => {
+        const _value = {
+          done: {
+            color: 'green',
+            text: '已完成',
+          },
+          un_pay: {
+            color: 'volcano',
+            text: '未付清',
+          },
+        }[value];
+        return (
+          <>
+            <Tag color={_value.color}>{_value.text}</Tag>
+          </>
+        );
       },
     },
     {
@@ -93,14 +89,21 @@ const Index = (props) => {
       valueType: 'option',
       render: (_, record) => (
         <>
-          <Button
-            type="link"
+          <a
+            onClick={() => {
+              setRow(record);
+            }}
+          >
+            查看
+          </a>
+          <Divider type="vertical" />
+          <a
             onClick={() => {
               dispatch(setVisibleUpdateForm({ visible: true, current: record }));
             }}
           >
             编辑
-          </Button>
+          </a>
           <Divider type="vertical" />
           <Popconfirm
             title="确定删除吗？"
@@ -108,9 +111,7 @@ const Index = (props) => {
             cancelText="否"
             onConfirm={async () => handleRemove(record.id)}
           >
-            <Button type="link" danger loading={delLoading === record.key}>
-              删除
-            </Button>
+            <a style={{ color: 'red' }}>删除</a>
           </Popconfirm>
         </>
       ),
@@ -191,14 +192,12 @@ const Index = (props) => {
   );
 
   const handleRemove = async (id) => {
-    setDelLoading(id);
     dispatch(submit({ id: id })).then(() => {
       dispatch(fetchToday());
       Modal.success({
         content: '删除成功',
         onOk: () => actionRef.current.reload(),
       });
-      setDelLoading('');
     });
   };
   useEffect(() => {
@@ -236,32 +235,40 @@ const Index = (props) => {
             添加
           </Button>
           <ProTable
+            bordered
             actionRef={actionRef}
             rowKey="id"
             search={false}
             toolBarRender={false}
             request={(params, sorter, filter) => {
               if (status === 'today') {
-                return queryToday({ ...params, sorter, filter });
+                return queryToday({ ...params, sorter, filter, status: '~new' });
               } else if (status === 'current_month') {
-                return queryCurrentMonth({ ...params, sorter, filter });
+                return queryCurrentMonth({ ...params, sorter, filter, status: '~new' });
               } else if (status === 'un_pay') {
                 filter = { ...filter, status };
                 return query({ ...params, sorter, filter });
               } else if (status === 'all') {
-                return query({ ...params, sorter, filter });
+                return query({ ...params, sorter, filter, status: '~new' });
               } else if (status === 'month') {
-                return queryMonth({ ...params, sorter, filter, _month: search_month });
+                return queryMonth({
+                  ...params,
+                  sorter,
+                  filter,
+                  _month: search_month,
+                  status: '~new',
+                });
               } else if (status === 'date_range') {
                 return queryDateRange({
                   ...params,
                   sorter,
                   filter,
                   _date_range: search_date[0] + ',' + search_date[1],
+                  status: '~new',
                 });
               }
             }}
-            pagination={{ position: ['bottomRight'], pageSize: 8, showSizeChanger: false }}
+            pagination={(status === 'all'||status === 'current_month')?{ position: ['bottomRight'], pageSize: 20, showSizeChanger: false }:false}
             columns={columns}
           />
         </Card>

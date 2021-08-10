@@ -72,6 +72,7 @@
     "numeral": "^2.0.6",
     "nzh": "^1.0.3",
     "omit.js": "^2.0.2",
+    "print-js": "^1.6.0",
     "prop-types": "^15.5.10",
     "react": "^16.14.0",
     "react-dev-inspector": "^1.1.1",

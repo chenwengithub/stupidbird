@@ -7,6 +7,7 @@ const api = {
   payment: url + 'payment/',
   weighinstore: url + 'weight_memo_in/',
   weighoutstore: url + 'weight_memo_out/',
+  bill: url + 'bill/',
 };
 
 export default api;

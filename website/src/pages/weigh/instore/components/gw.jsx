@@ -33,7 +33,7 @@ const GW = (props) => {
         }),
       ).then(() => {
         message.success({
-          content: '添加成功!',
+          content: '成功!',
           key,
           duration: 1,
           style: {
@@ -53,10 +53,11 @@ const GW = (props) => {
     <div>
       <Modal
         destroyOnClose
+        maskClosable={false}
         centered
         visible={visible_gross_weight}
-        title={<h2>过磅单</h2>}
-        okText="添加"
+        title={<h2>毛重过磅</h2>}
+        okText="确定"
         cancelText="取消"
         onCancel={() => {
           dispatch(setVisibleGW(false));
@@ -80,15 +81,10 @@ const GW = (props) => {
         </Tag>
         <Form form={form} name="basic" onFinish={onFinish} onFinishFailed={onFinishFailed}>
           <div className={styles.form}>
-            <Form.Item
-              name="gross_weight"
-              rules={[
-                rules.int,
-                rules.required,
-              ]}
-            >
+            <Form.Item name="gross_weight" rules={[rules.int, rules.required]}>
               <Input
                 prefix="毛重:"
+                autocomplete="off"
                 suffix="kg"
                 style={{ color: '#d9363e', border: '2px solid #e8e8e8', fontSize: '24px' }}
                 size="28px"
@@ -96,12 +92,9 @@ const GW = (props) => {
               />
             </Form.Item>
 
-            <Form.Item
-              name="deduct_weight"
-              initialValue="0"
-              rules={[rules.int, rules.required]}
-            >
+            <Form.Item name="deduct_weight" initialValue="0" rules={[rules.int, rules.required]}>
               <Input
+                autocomplete="off"
                 prefix="扣除:"
                 suffix="kg"
                 style={{ color: '#d9363e', border: '2px solid #e8e8e8', fontSize: '24px' }}
@@ -110,6 +103,7 @@ const GW = (props) => {
 
             <Form.Item name="legal_prise" rules={[rules.float]}>
               <Input
+                autocomplete="off"
                 prefix="价格:"
                 suffix="元/kg"
                 style={{ color: '#d9363e', border: '2px solid #e8e8e8', fontSize: '24px' }}

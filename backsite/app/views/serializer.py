@@ -5,6 +5,7 @@ from ..models.payment import Payment
 from ..models.truck import Truck
 from ..models.weight_memo_in import WeightMemoIn
 from ..models.weight_memo_out import WeightMemoOut
+from ..models.bill import Bill
 from ..models.user import User
 
 
@@ -49,4 +50,10 @@ class WeightMemoOutSerializer(serializers.ModelSerializer):
 class SteelPlantSerializer(serializers.ModelSerializer):
     class Meta:  # 写一个内部类
         model = SteelPlant  # 该序列化类跟哪个表建立关系
+        fields = '__all__'  # 序列化全部字段
+
+
+class BillSerializer(serializers.ModelSerializer):
+    class Meta:  # 写一个内部类
+        model = Bill  # 该序列化类跟哪个表建立关系
         fields = '__all__'  # 序列化全部字段

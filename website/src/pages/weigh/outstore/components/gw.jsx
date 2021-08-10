@@ -9,7 +9,7 @@ import rules from '@/utils/rules';
 const GW = (props) => {
   const [form] = Form.useForm();
   const [grossWeight, setGrossWeight] = useState();
-  form.setFieldsValue({ deduct_weight: 0, gross_weight: grossWeight });
+  // form.setFieldsValue({ deduct_weight: 0, gross_weight: grossWeight });
   const {
     dispatch,
     weigh_outstore: {
@@ -58,6 +58,7 @@ const GW = (props) => {
     <div>
       <Modal
         destroyOnClose
+        maskClosable={false}
         centered
         visible={visible_gross_weight}
         title={<h2>过磅单</h2>}

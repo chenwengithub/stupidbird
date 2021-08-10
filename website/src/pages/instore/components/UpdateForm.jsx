@@ -137,27 +137,39 @@ const UpdateForm = (props) => {
           className={styles.form}
         >
           <Form.Item name="gross_weight" rules={[rules.int, rules.required]}>
-            <Input prefix="毛重:" suffix="kg" style={inputStyle} />
+            <Input autocomplete="off" prefix="毛重:" suffix="kg" style={inputStyle} />
           </Form.Item>
           <Form.Item name="body_weight" rules={[rules.int, rules.required]}>
-            <Input prefix="皮重:" suffix="kg" style={inputStyle} />
+            <Input autocomplete="off" prefix="皮重:" suffix="kg" style={inputStyle} />
           </Form.Item>
           <Form.Item name="deduct_weight" rules={[rules.int, rules.required]} initialValue="0">
-            <Input prefix="扣除:" suffix="kg" style={inputStyle} />
+            <Input autocomplete="off" prefix="扣除:" suffix="kg" style={inputStyle} />
           </Form.Item>
           <Form.Item name="legal_prise" rules={[rules.float, rules.required]} required>
-            <Input prefix="价格:" suffix="元/kg" style={inputStyle} />
+            <Input autocomplete="off" prefix="价格:" suffix="元/kg" style={inputStyle} />
           </Form.Item>
           <Form.Item name="legal_weight_text">
-            <Input prefix="净重:" suffix="kg" style={inputStyle} readOnly={true} />
+            <Input
+              autocomplete="off"
+              prefix="净重:"
+              suffix="kg"
+              style={inputStyle}
+              readOnly={true}
+            />
           </Form.Item>
         </StepsForm.StepForm>
         <StepsForm.StepForm name="pay" size="30px" form={form1} className={styles.form}>
           <Form.Item name="account_payable_text">
-            <Input prefix="应付:" suffix="元" style={inputStyle} readOnly={true} />
+            <Input
+              autocomplete="off"
+              prefix="应付:"
+              suffix="元"
+              style={inputStyle}
+              readOnly={true}
+            />
           </Form.Item>
           <Form.Item name="actual_payment">
-            <Input prefix="实付:" suffix="元" style={inputStyle} readOnly />
+            <Input autocomplete="off" prefix="实付:" suffix="元" style={inputStyle} readOnly />
           </Form.Item>
           <Pay form1={form1} />
         </StepsForm.StepForm>
@@ -189,7 +201,9 @@ const getText = (params) => {
       ' - ' +
       body_weight +
       (deduct_weight ? ' - ' + deduct_weight : '') +
-      ') = '+ legal_weight + ' * ' +
+      ') = ' +
+      legal_weight +
+      ' * ' +
       legal_prise +
       ' = ' +
       account_payable;

@@ -1,11 +1,8 @@
 from django.db import models
 
 
-class Payment(models.Model):
-    amount_wechat = models.IntegerField(null=True, blank=True)
-    amount_cash = models.IntegerField(null=True, blank=True)
-    amount_bank = models.IntegerField(null=True, blank=True)
-    amount_iou = models.IntegerField(null=True, blank=True)
-    amount_total = models.IntegerField(null=True, blank=True)
-    remark = models.CharField(max_length=200)
+class Bill(models.Model):
+    type = models.CharField(max_length=200, null=True, blank=True)
+    reason = models.CharField(max_length=200, null=True, blank=True)
+    money = models.IntegerField(null=True, blank=True)
     createDateTime = models.CharField(max_length=200)

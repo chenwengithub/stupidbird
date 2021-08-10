@@ -136,6 +136,7 @@ const Index = () => {
   return (
     <PageContainer>
       <ProTable
+        bordered
         headerTitle="中间人列表"
         actionRef={actionRef}
         rowKey="id"

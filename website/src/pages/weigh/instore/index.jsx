@@ -21,7 +21,7 @@ const Index = (props) => {
                 入库过磅
                 <a
                   onClick={() => {
-                      setType('outstore');
+                    setType('outstore');
                   }}
                 >
                   切换
@@ -40,6 +40,7 @@ const Index = (props) => {
                 <Tag className={styles.error} color="#f50">
                   摄像头异常×
                 </Tag>
+                <input type="button" value="Print" onclick="window.print()" />
               </div>
             </div>
             <Card bordered={false} className={styles.body}>
@@ -57,7 +58,7 @@ const Index = (props) => {
                       color: '#d9363e',
                     }}
                   >
-                    850 kg
+                    - kg
                   </p>
                 </Col>
               </Row>

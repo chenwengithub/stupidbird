@@ -7,6 +7,7 @@ import styles from './style.less';
 import { setVisibleBW, submit, setLoadingListIndex } from '../actions';
 import { DashboardOutlined, RedEnvelopeOutlined, CheckOutlined } from '@ant-design/icons';
 import rules from '@/utils/rules';
+import printJS from 'print-js';
 
 const { Step } = Steps;
 
@@ -128,6 +129,7 @@ const BW = (props) => {
             <Modal
               width={550}
               centered
+              maskClosable={false}
               visible={visible_body_weight}
               title={<h2>过磅</h2>}
               onCancel={() => {
@@ -177,31 +179,68 @@ const BW = (props) => {
             磅显：{gross_weight_own} kg
           </Tag>
           <Form.Item name="gross_weight_own" rules={[rules.float, rules.required]}>
-            <Input prefix="毛重:" suffix="吨" style={inputStyle} />
+            <Input autocomplete="off" prefix="毛重:" suffix="吨" style={inputStyle} />
           </Form.Item>
           <Form.Item hidden name="legal_weight_own">
-            <Input />
+            <Input autocomplete="off" />
           </Form.Item>
           <Form.Item hidden name="expected_payment">
-            <Input />
+            <Input autocomplete="off" />
           </Form.Item>
           <Form.Item name="legal_weight_own_text">
-            <Input prefix="净重:" suffix="kg" style={inputStyle} readOnly={true} />
+            <Input
+              autocomplete="off"
+              prefix="净重:"
+              suffix="kg"
+              style={inputStyle}
+              readOnly={true}
+            />
           </Form.Item>
           <Form.Item name="expected_payment_text">
-            <Input prefix="应付:" suffix="元" style={inputStyle} readOnly={true} />
+            <Input
+              autocomplete="off"
+              prefix="应付:"
+              suffix="元"
+              style={inputStyle}
+              readOnly={true}
+            />
           </Form.Item>
         </StepsForm.StepForm>
         <StepsForm.StepForm name="pay" className={styles.form}>
           {step2Data && (
             <>
-              <Card title="出库磅单" extra={<a href="#">打印磅单</a>}>
-                <p>目的地：{step2Data.steel_plant}</p>
-                <p>车牌号：{step2Data.car_number}</p>
-                <p>毛重：{step2Data.gross_weight_own}吨</p>
-                <p>皮重：{step2Data.body_weight_own}吨</p>
-                <p>净重：{step2Data.legal_weight_own}吨</p>
-                <p>日期：{datetime}</p>
+              <Card
+                title="出库磅单"
+                style={{ color: 'blue' }}
+                extra={
+                  <a
+                    onClick={() => {
+                      printJS({
+                        printable: 'print',
+                        type: 'html',
+                        header: '出库磅单',
+                        headerStyle: 'text-align:center;font-size:26pt;font-weight:500',
+                        maxWidth: 250,
+                        font_size: '14pt',
+                        honorMarginPadding: false,
+                        style: 'padding-bottom:30px',
+                      });
+                    }}
+                  >
+                    打印磅单
+                  </a>
+                }
+              >
+                <div id="print">
+                  <p>#{current && current.id}</p>
+                  <p>------------------------------</p>
+                  <p>车牌号：{step2Data.car_number}</p>
+                  <p>毛重：{step2Data.gross_weight_own}吨</p>
+                  <p>皮重：{step2Data.body_weight_own}吨</p>
+                  <p>净重：{step2Data.legal_weight_own}吨</p>
+                  <p>日期：{current && current.createDateTime}</p>
+                  <p>------------------------------</p>
+                </div>
               </Card>
               <Card style={{ marginTop: '10px' }}>
                 <p>暂定价格：{step2Data.agreed_prise}</p>

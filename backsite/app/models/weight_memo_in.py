@@ -15,4 +15,4 @@ class WeightMemoIn(models.Model):
     account_payable_text = models.CharField(max_length=100, null=True, blank=True)
     is_done = models.BooleanField(null=True, blank=True)
     remark = models.CharField(max_length=200, null=True, blank=True)
-    createDateTime = models.DateTimeField('date created')
+    createDateTime = models.DateTimeField(auto_now_add=True)

@@ -8,4 +8,5 @@ export default {
   'menu.manage.truck': '货车管理',
   'menu.manage.intermediary': '中间人管理',
   'menu.home': '首页',
+  'menu.financial_affairs': '财务',
 };

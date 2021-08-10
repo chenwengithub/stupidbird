@@ -126,7 +126,7 @@ const Pay = (props) => {
           />
         </Form.Item>
         <Form.Item name="remark" hidden={hideRemark}>
-          <Input prefix="备注:" />
+          <Input autocomplete="off" prefix="备注:" />
         </Form.Item>
       </Card>
     </>

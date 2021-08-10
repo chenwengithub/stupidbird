@@ -173,55 +173,51 @@ const CreateForm = (props) => {
             ></Select>
           </Form.Item>
           <Form.Item name="gross_weight_own" rules={[rules.float, rules.required]}>
-            <Input prefix="毛重:" suffix="吨" />
+            <Input autocomplete="off" prefix="毛重:" suffix="吨" />
           </Form.Item>
           <Form.Item name="body_weight_own" rules={[rules.float, rules.required]}>
-            <Input prefix="皮重:" suffix="吨" />
+            <Input autocomplete="off" prefix="皮重:" suffix="吨" />
           </Form.Item>
           <Form.Item hidden name="legal_weight_own">
-            <Input />
+            <Input autocomplete="off" />
           </Form.Item>
           <Form.Item hidden name="expected_payment">
-            <Input />
+            <Input autocomplete="off" />
           </Form.Item>
           <Form.Item name="agreed_prise" rules={[rules.int, rules.required]}>
-            <Input prefix="价格:" suffix="元/吨" />
+            <Input autocomplete="off" prefix="价格:" suffix="元/吨" />
           </Form.Item>
           <Form.Item name="legal_weight_own_text">
-            <Input prefix="净重:" suffix="吨" readOnly={true} />
+            <Input autocomplete="off" prefix="净重:" suffix="吨" readOnly={true} />
           </Form.Item>
           <Form.Item name="expected_payment_text">
-            <Input prefix="应付:" suffix="元" readOnly={true} />
+            <Input autocomplete="off" prefix="应付:" suffix="元" readOnly={true} />
           </Form.Item>
         </StepsForm.StepForm>
         <StepsForm.StepForm name="pay" form={form1} onValuesChange={onValuesChange}>
           <Form.Item name="gross_weight_opposite" rules={[rules.float, rules.required]}>
-            <Input prefix="毛重:" suffix="吨" />
+            <Input autocomplete="off" prefix="毛重:" suffix="吨" />
           </Form.Item>
           <Form.Item name="body_weight_opposite" rules={[rules.float, rules.required]}>
-            <Input prefix="皮重:" suffix="吨" />
+            <Input autocomplete="off" prefix="皮重:" suffix="吨" />
           </Form.Item>
-          <Form.Item
-            name="deduct_weight"
-            initialValue="0"
-            rules={[rules.float, rules.required]}
-          >
-            <Input prefix="扣除:" suffix="吨（注意是吨！）" />
+          <Form.Item name="deduct_weight" initialValue="0" rules={[rules.float, rules.required]}>
+            <Input autocomplete="off" prefix="扣除:" suffix="吨（注意是吨！）" />
           </Form.Item>
           <Form.Item hidden name="legal_weight_opposite">
-            <Input />
+            <Input autocomplete="off" />
           </Form.Item>
           <Form.Item hidden name="opposite_payment">
-            <Input />
+            <Input autocomplete="off" />
           </Form.Item>
           <Form.Item name="actual_prise" rules={[rules.int, rules.required]}>
-            <Input prefix="价格:" suffix="元/吨" />
+            <Input autocomplete="off" prefix="价格:" suffix="元/吨" />
           </Form.Item>
           <Form.Item name="legal_weight_opposite_text">
-            <Input prefix="净重:" suffix="吨" readOnly={true} />
+            <Input autocomplete="off" prefix="净重:" suffix="吨" readOnly={true} />
           </Form.Item>
           <Form.Item name="opposite_payment_text">
-            <Input prefix="应付:" suffix="元" readOnly={true} />
+            <Input autocomplete="off" prefix="应付:" suffix="元" readOnly={true} />
           </Form.Item>
         </StepsForm.StepForm>
       </StepsForm>
@@ -251,7 +247,9 @@ const getText = (params) => {
     ' - ' +
     body_weight +
     (deduct_weight ? ' - ' + deduct_weight : '') +
-    ')  = '+ legal_weight + ' * ' +
+    ')  = ' +
+    legal_weight +
+    ' * ' +
     prise +
     ' = ' +
     payment;

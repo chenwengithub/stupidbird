@@ -50,11 +50,11 @@ const PaymentForm = (props) => {
         rest_payment,
         actual_payment,
         payment_done,
-        opposite_payment,
+        expected_payment,
       } = current;
       setPaymentDone(payment_done);
       setVisibleSwitch(advance_payment ? true : false);
-      setRest(advance_payment && opposite_payment - actual_payment);
+      setRest(advance_payment && expected_payment - actual_payment);
       form.setFieldsValue({
         advance_payment,
         rest_payment,
@@ -64,17 +64,17 @@ const PaymentForm = (props) => {
     return () => {};
   }, [current]);
   const onValuesChange = () => {
-    const { opposite_payment } = current;
+    const { expected_payment } = current;
     const { advance_payment, rest_payment } = form.getFieldsValue();
     setVisibleSwitch(advance_payment ? true : false);
     if (advance_payment) {
       let actual_payment = parseInt(advance_payment);
       if (rest_payment) {
         actual_payment = parseInt(advance_payment) + parseInt(rest_payment);
-        setPaymentDone(opposite_payment == actual_payment);
+        setPaymentDone(expected_payment == actual_payment);
       }
       form.setFieldsValue({ actual_payment });
-      setRest(opposite_payment - actual_payment);
+      setRest(expected_payment - actual_payment);
     }
   };
   return (
@@ -82,8 +82,8 @@ const PaymentForm = (props) => {
       centered
       destroyOnClose
       visible={visible_payment_form}
-      title={<h2>添加钢厂磅单</h2>}
-      okText="添加"
+      title={<h2>结账单</h2>}
+      okText="确认"
       cancelText="取消"
       onCancel={() => {
         dispatch(setVisiblePaymentForm({ visible: false, current: null }));
@@ -101,10 +101,10 @@ const PaymentForm = (props) => {
           marginBottom: '30px',
           width: '100%',
         }}
-        hidden={current && !current.opposite_payment}
+        hidden={current && !current.expected_payment}
         color="red"
       >
-        总额：{current && current.opposite_payment} 元， 剩余：
+        总额：{current && current.expected_payment} 元， 剩余：
         {rest} 元
       </Tag>
       <Form
@@ -115,14 +115,14 @@ const PaymentForm = (props) => {
         onFinish={onFinish}
       >
         <Form.Item name="actual_payment" hidden>
-          <Input />
+          <Input autocomplete="off" />
         </Form.Item>
         <Form.Item name="advance_payment" rules={[rules.int]}>
-          <Input prefix="预付款:" suffix="元" />
+          <Input autocomplete="off" prefix="预付款:" suffix="元" />
         </Form.Item>
         <Form.Item
           name="rest_payment"
-          hidden={current && !current.opposite_payment}
+          hidden={current && !current.expected_payment}
           rules={[rules.int]}
         >
           <Input
@@ -143,7 +143,7 @@ const PaymentForm = (props) => {
                       onValuesChange();
                     }
                   }}
-                  checkedChildren="款项付清"
+                  checkedChildren="付清"
                   unCheckedChildren="是否付清"
                   defaultChecked={payment_done}
                 />

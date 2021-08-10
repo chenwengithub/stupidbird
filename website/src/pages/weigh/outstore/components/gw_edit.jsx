@@ -61,6 +61,7 @@ const GWEdit = (props) => {
     <div>
       <Modal
         destroyOnClose
+        maskClosable={false}
         centered
         visible={visible_gross_weight_edit}
         title={<h2>过磅单</h2>}

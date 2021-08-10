@@ -87,6 +87,11 @@ export default defineConfig({
               component: './outstore',
             },
             {
+              path: '/financial_affairs',
+              name: 'financial_affairs',
+              component: './financial_affairs',
+            },
+            {
               path: '/report',
               name: 'report',
               component: './report',

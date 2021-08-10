@@ -70,6 +70,7 @@ const Pay = (props) => {
           rules={[rules.int]}
         >
           <Input
+            autocomplete="off"
             prefix="微信付款:"
             suffix="元"
             style={{
@@ -85,6 +86,7 @@ const Pay = (props) => {
           rules={[rules.int]}
         >
           <Input
+            autocomplete="off"
             prefix="现金付款:"
             suffix="元"
             style={{
@@ -100,6 +102,7 @@ const Pay = (props) => {
           rules={[rules.int]}
         >
           <Input
+            autocomplete="off"
             prefix="银行转账:"
             suffix="元"
             style={{
@@ -115,6 +118,7 @@ const Pay = (props) => {
           rules={[rules.int]}
         >
           <Input
+            autocomplete="off"
             prefix="打欠条:"
             suffix="元"
             style={{
@@ -125,7 +129,7 @@ const Pay = (props) => {
           />
         </Form.Item>
         <Form.Item name="remark" hidden={hideRemark}>
-          <Input prefix="备注:" />
+          <Input autocomplete="off" prefix="备注:" />
         </Form.Item>
       </Card>
     </>

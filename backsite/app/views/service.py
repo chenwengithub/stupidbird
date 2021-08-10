@@ -5,7 +5,7 @@ import json
 
 def query(req, res, serializer):
     current = int(req.GET.get('current') or 1)
-    size = int(req.GET.get('pageSize') or 5)
+    size = int(req.GET.get('pageSize') or 1000)
     total = len(res)
     order = False
     if req.GET.get('sorter'):

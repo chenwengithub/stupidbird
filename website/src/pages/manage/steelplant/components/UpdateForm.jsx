@@ -12,38 +12,24 @@ const UpdateForm = (props) => {
       onOk={() => {
         form
           .validateFields()
-          .then(value => {
+          .then((value) => {
             form.resetFields();
             onSubmit({ key: values.id, ...value });
           })
-          .catch(info => {
+          .catch((info) => {
             console.log('Validate Failed:', info);
           });
       }}
     >
-      <Form
-        form={form}
-        layout="vertical"
-        name="form_in_modal"
-        initialValues={values}
-      >
-        <Form.Item
-          name="name"
-          label="钢厂名称"
-        >
-          <Input />
+      <Form form={form} layout="vertical" name="form_in_modal" initialValues={values}>
+        <Form.Item name="name" label="钢厂名称">
+          <Input autocomplete="off" />
         </Form.Item>
-        <Form.Item
-          name="address"
-          label="地址"
-        >
-          <Input />
+        <Form.Item name="address" label="地址">
+          <Input autocomplete="off" />
         </Form.Item>
-        <Form.Item
-          name="remark"
-          label="备注"
-        >
-          <Input />
+        <Form.Item name="remark" label="备注">
+          <Input autocomplete="off" />
         </Form.Item>
       </Form>
     </Modal>

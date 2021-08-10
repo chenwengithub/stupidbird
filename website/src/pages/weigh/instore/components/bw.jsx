@@ -54,7 +54,7 @@ const BW = (props) => {
       dispatch(submit(Object.assign(current, buildObj(values)))).then(() => {
         dispatch(setLoadingListIndex(''));
         message.success({
-          content: '修改成功!',
+          content: '成功!',
           key,
           duration: 1,
           style: {
@@ -111,9 +111,10 @@ const BW = (props) => {
           return (
             <Modal
               width={550}
+              maskClosable={false}
               centered
               visible={visible_body_weight}
-              title={<h2>过磅</h2>}
+              title={<h2>皮重过磅</h2>}
               onCancel={() => {
                 dispatch(setVisibleBW({ visible: false, current: null }));
               }}
@@ -161,24 +162,42 @@ const BW = (props) => {
             磅显：{body_weight} kg
           </Tag>
           <Form.Item name="body_weight" rules={[rules.int, rules.required]}>
-            <Input prefix="皮重:" suffix="kg" style={inputStyle} />
+            <Input autocomplete="off" prefix="皮重:" suffix="kg" style={inputStyle} />
           </Form.Item>
           <Form.Item name="deduct_weight" rules={[rules.int, rules.required]} initialValue="0">
-            <Input prefix="扣除:" suffix="kg" style={inputStyle} />
+            <Input autocomplete="off" prefix="扣除:" suffix="kg" style={inputStyle} />
           </Form.Item>
           <Form.Item name="legal_prise" rules={[rules.float, rules.required]}>
-            <Input prefix="价格:" suffix="元/kg" style={inputStyle} />
+            <Input autocomplete="off" prefix="价格:" suffix="元/kg" style={inputStyle} />
           </Form.Item>
           <Form.Item name="legal_weight_text">
-            <Input prefix="净重:" suffix="kg" style={inputStyle} readOnly={true} />
+            <Input
+              autocomplete="off"
+              prefix="净重:"
+              suffix="kg"
+              style={inputStyle}
+              readOnly={true}
+            />
           </Form.Item>
         </StepsForm.StepForm>
         <StepsForm.StepForm name="pay" form={form1} className={styles.form}>
           <Form.Item name="account_payable_text" style={{ lineHeight: '40px' }}>
-            <Input prefix="应付:" suffix="元" style={inputStyle} readOnly={true} />
+            <Input
+              autocomplete="off"
+              prefix="应付:"
+              suffix="元"
+              style={inputStyle}
+              readOnly={true}
+            />
           </Form.Item>
           <Form.Item name="actual_payment">
-            <Input prefix="实付:" suffix="元" style={inputStyle} readOnly={true} />
+            <Input
+              autocomplete="off"
+              prefix="实付:"
+              suffix="元"
+              style={inputStyle}
+              readOnly={true}
+            />
           </Form.Item>
           <Pay form1={form1} />
         </StepsForm.StepForm>

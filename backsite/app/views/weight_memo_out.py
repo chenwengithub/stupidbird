@@ -30,6 +30,13 @@ def find(request):
     return JsonResponse(query(request, WeightMemoOut.objects.all(), WeightMemoOutSerializer), safe=False)
 
 
+def find_month(request):
+    current_month = str(date.today())[0:7]
+    res = query(request, WeightMemoOut.objects.all().filter(createDateTime__startswith=current_month),
+                WeightMemoOutSerializer)
+    return JsonResponse(res, safe=False)
+
+
 def add(data):
     obj = WeightMemoOut(createDateTime=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     for key, value in data.items():
@@ -56,7 +63,8 @@ def add(data):
             else:
                 setattr(obj, 'status', 'un_pay')
         else:
-            setattr(obj, 'status', 'on_the_way')
+            # setattr(obj, 'status', 'on_the_way')
+            setattr(obj, 'status', 'un_pay')
     else:
         setattr(obj, 'status', 'new')
     obj.save()
@@ -94,7 +102,8 @@ def update(key, data):
             else:
                 setattr(obj, 'status', 'un_pay')
         else:
-            setattr(obj, 'status', 'on_the_way')
+            # setattr(obj, 'status', 'on_the_way')
+            setattr(obj, 'status', 'un_pay')
     else:
         setattr(obj, 'status', 'new')
     obj.save()

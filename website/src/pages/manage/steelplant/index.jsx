@@ -130,6 +130,7 @@ const TableList = () => {
   return (
     <PageContainer>
       <ProTable
+        bordered
         headerTitle="钢厂列表"
         actionRef={actionRef}
         rowKey="id"

@@ -56,7 +56,7 @@ def find_month(request):
 
 
 def add(data):
-    obj = WeightMemoIn(createDateTime=datetime.now().strftime('%Y-%m-%d %H:%M:%S'), is_done=False)
+    obj = WeightMemoIn(is_done=False)
     payment = Payment(createDateTime=datetime.now().strftime('%Y-%m-%d %H:%M:%S'), remark='')
     for key, value in data.items():
         if value:

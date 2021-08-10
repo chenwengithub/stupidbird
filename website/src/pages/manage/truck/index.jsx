@@ -133,6 +133,7 @@ const TableList = () => {
   return (
     <PageContainer>
       <ProTable
+        bordered
         headerTitle="货车列表"
         actionRef={actionRef}
         rowKey="id"

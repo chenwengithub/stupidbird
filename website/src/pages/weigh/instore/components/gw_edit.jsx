@@ -29,7 +29,7 @@ const GWEdit = (props) => {
       dispatch(submit(Object.assign(current, values))).then(() => {
         dispatch(setLoadingListIndex(''));
         message.success({
-          content: '修改成功!',
+          content: '成功!',
           key,
           duration: 1,
           style: {
@@ -49,10 +49,11 @@ const GWEdit = (props) => {
     <div>
       <Modal
         destroyOnClose
+        maskClosable={false}
         centered
         visible={visible_gross_weight_edit}
-        title={<h2>过磅单</h2>}
-        okText="修改"
+        title={<h2>过磅单-修改</h2>}
+        okText="确定"
         cancelText="取消"
         onCancel={() => {
           dispatch(setVisibleGWEdit({ visible: false, current: null }));
@@ -71,6 +72,7 @@ const GWEdit = (props) => {
           <div className={styles.form}>
             <Form.Item name="gross_weight" rules={[rules.int, rules.required]}>
               <Input
+                autocomplete="off"
                 prefix="毛重:"
                 suffix="kg"
                 style={{ color: '#d9363e', border: '2px solid #e8e8e8', fontSize: '28px' }}
@@ -78,12 +80,9 @@ const GWEdit = (props) => {
               />
             </Form.Item>
 
-            <Form.Item
-              name="deduct_weight"
-              rules={[rules.int, rules.required]}
-              initialValue="0"
-            >
+            <Form.Item name="deduct_weight" rules={[rules.int, rules.required]} initialValue="0">
               <Input
+                autocomplete="off"
                 prefix="扣除:"
                 suffix="kg"
                 style={{ color: '#d9363e', border: '2px solid #e8e8e8', fontSize: '28px' }}
@@ -92,6 +91,7 @@ const GWEdit = (props) => {
 
             <Form.Item name="legal_prise" rules={[rules.float]}>
               <Input
+                autocomplete="off"
                 prefix="价格:"
                 suffix="元/kg"
                 style={{ color: '#d9363e', border: '2px solid #e8e8e8', fontSize: '28px' }}
