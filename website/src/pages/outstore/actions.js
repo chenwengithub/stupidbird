@@ -8,4 +8,5 @@ export const setVisiblePaymentForm = createAction('outstore/setVisiblePaymentFor
 export const fetchSteelPlant = createAction('outstore/fetchSteelPlant');
 export const fetchTruck = createAction('outstore/fetchTruck');
 export const fetchIntermediary = createAction('outstore/fetchIntermediary');
+export const fetchMonth = createAction('outstore/fetchMonth');
 

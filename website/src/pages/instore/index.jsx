@@ -9,7 +9,13 @@ import UpdateForm from './components/UpdateForm';
 import Header from './components/Header';
 import Detail from './components/Detail';
 import { query, queryToday, queryCurrentMonth, queryDateRange, queryMonth } from './service';
-import { setVisibleCreateForm, setVisibleUpdateForm, fetchToday, submit } from './actions';
+import {
+  setVisibleCreateForm,
+  setVisibleUpdateForm,
+  fetchToday,
+  setToday,
+  submit,
+} from './actions';
 import styles from './style.less';
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
@@ -201,7 +207,7 @@ const Index = (props) => {
     });
   };
   useEffect(() => {
-    dispatch(fetchToday());
+    // dispatch(fetchToday());
     return () => {};
   }, []);
   return (
@@ -242,15 +248,33 @@ const Index = (props) => {
             toolBarRender={false}
             request={(params, sorter, filter) => {
               if (status === 'today') {
-                return queryToday({ ...params, sorter, filter, status: '~new' });
+                return queryToday({ ...params, sorter, filter, status: '~new' }).then((data) => {
+                  dispatch(setToday(data));
+                  return data;
+                });
               } else if (status === 'current_month') {
+                queryCurrentMonth({ status: '~new' }).then((data) => {
+                  dispatch(setToday(data));
+                });
                 return queryCurrentMonth({ ...params, sorter, filter, status: '~new' });
               } else if (status === 'un_pay') {
                 filter = { ...filter, status };
-                return query({ ...params, sorter, filter });
+                return query({ ...params, sorter, filter }).then((data) => {
+                  dispatch(setToday(data));
+                  return data;
+                });
               } else if (status === 'all') {
+                query({ status: '~new' }).then((data) => {
+                  dispatch(setToday(data));
+                });
                 return query({ ...params, sorter, filter, status: '~new' });
               } else if (status === 'month') {
+                queryMonth({
+                  _month: search_month,
+                  status: '~new',
+                }).then((data) => {
+                  dispatch(setToday(data));
+                });
                 return queryMonth({
                   ...params,
                   sorter,
@@ -259,6 +283,12 @@ const Index = (props) => {
                   status: '~new',
                 });
               } else if (status === 'date_range') {
+                queryDateRange({
+                  _date_range: search_date[0] + ',' + search_date[1],
+                  status: '~new',
+                }).then((data) => {
+                  dispatch(setToday(data));
+                });
                 return queryDateRange({
                   ...params,
                   sorter,
@@ -268,7 +298,14 @@ const Index = (props) => {
                 });
               }
             }}
-            pagination={(status === 'all'||status === 'current_month')?{ position: ['bottomRight'], pageSize: 20, showSizeChanger: false }:false}
+            pagination={
+              status === 'all' ||
+              status === 'current_month' ||
+              status === 'month' ||
+              status === 'date_range'
+                ? { position: ['bottomRight'], pageSize: 20, showSizeChanger: false }
+                : false
+            }
             columns={columns}
           />
         </Card>

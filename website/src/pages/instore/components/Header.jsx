@@ -15,13 +15,13 @@ const Header = (props) => {
     <Card bordered={false}>
       <Row>
         <Col sm={8} xs={24}>
-          <Info title="今日入库" value={today.total + " 个"} bordered />
+          <Info title="入库" value={today.total + " 个"} bordered />
         </Col>
         <Col sm={8} xs={24}>
-          <Info title="今日吨位" value={today.weight + " kg"} bordered />
+          <Info title="重量" value={today.weight + " kg"} bordered />
         </Col>
         <Col sm={8} xs={24}>
-          <Info title="今日支出" value={today.paid + " 元"} />
+          <Info title="支出" value={today.paid + " 元"} />
         </Col>
       </Row>
     </Card>

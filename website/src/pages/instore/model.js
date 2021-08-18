@@ -16,7 +16,6 @@ const InstoreModel = {
       return { ...state, visible_update_form: visible, current };
     },
     setToday(state, { payload:{data} }) {
-      console.log(data)
       let total = data.length;
       let weight = 0;
       let paid = 0;

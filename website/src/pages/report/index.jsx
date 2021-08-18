@@ -1,48 +1,156 @@
-import React from 'react';
-import { PageContainer } from '@ant-design/pro-layout';
-import { Card, Alert, Typography } from 'antd';
-import styles from './index.less';
+import { EllipsisOutlined } from '@ant-design/icons';
+import { Col, Dropdown, Menu, Row } from 'antd';
+import React, { Component } from 'react';
+import { GridContent } from '@ant-design/pro-layout';
+import { connect } from 'umi';
+import { getTimeDistance } from './utils/utils';
+import styles from './style.less';
+import SalesCard from './components/SalesCard';
+import ProportionSales from './components/ProportionSales';
 
-const CodePreview = ({ children }) => (
-  <pre className={styles.pre}>
-    <code>
-      <Typography.Text copyable>{children}</Typography.Text>
-    </code>
-  </pre>
-);
+class Analysis extends Component {
+  state = {
+    salesType: 'all',
+    currentTabKey: '',
+    rangePickerValue: getTimeDistance('year'),
+  };
+  reqRef = 0;
+  timeoutId = 0;
 
-export default () => (
-  <PageContainer>
-    <Card>
-      <Alert
-        message="更快更强的重型组件，已经发布。"
-        type="success"
-        showIcon
-        banner
-        style={{
-          margin: -12,
-          marginBottom: 24,
-        }}
-      />
-      <Typography.Text strong>
-        高级表格{' '}
-        <a href="https://protable.ant.design/" rel="noopener noreferrer" target="__blank">
-          欢迎使用
-        </a>
-      </Typography.Text>
-      <CodePreview>yarn add @ant-design/pro-table</CodePreview>
-      <Typography.Text
-        strong
-        style={{
-          marginBottom: 12,
-        }}
-      >
-        高级布局{' '}
-        <a href="https://prolayout.ant.design/" rel="noopener noreferrer" target="__blank">
-          欢迎使用
-        </a>
-      </Typography.Text>
-      <CodePreview>yarn add @ant-design/pro-layout</CodePreview>
-    </Card>
-  </PageContainer>
-);
+  componentDidMount() {
+    const { dispatch } = this.props;
+    this.reqRef = requestAnimationFrame(() => {
+      dispatch({
+        type: 'dashboardAndanalysis/fetch',
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'dashboardAndanalysis/clear',
+    });
+    cancelAnimationFrame(this.reqRef);
+    clearTimeout(this.timeoutId);
+  }
+
+  handleChangeSalesType = (e) => {
+    this.setState({
+      salesType: e.target.value,
+    });
+  };
+  handleTabChange = (key) => {
+    this.setState({
+      currentTabKey: key,
+    });
+  };
+  handleRangePickerChange = (rangePickerValue) => {
+    const { dispatch } = this.props;
+    this.setState({
+      rangePickerValue,
+    });
+    dispatch({
+      type: 'dashboardAndanalysis/fetchSalesData',
+    });
+  };
+  selectDate = (type) => {
+    const { dispatch } = this.props;
+    this.setState({
+      rangePickerValue: getTimeDistance(type),
+    });
+    dispatch({
+      type: 'dashboardAndanalysis/fetchSalesData',
+    });
+  };
+  isActive = (type) => {
+    const { rangePickerValue } = this.state;
+
+    if (!rangePickerValue) {
+      return '';
+    }
+
+    const value = getTimeDistance(type);
+
+    if (!value) {
+      return '';
+    }
+
+    if (!rangePickerValue[0] || !rangePickerValue[1]) {
+      return '';
+    }
+
+    if (
+      rangePickerValue[0].isSame(value[0], 'day') &&
+      rangePickerValue[1].isSame(value[1], 'day')
+    ) {
+      return styles.currentDate;
+    }
+
+    return '';
+  };
+
+  render() {
+    const { rangePickerValue, salesType, currentTabKey } = this.state;
+    const { dashboardAndanalysis, loading } = this.props;
+    const {
+      visitData,
+      visitData2,
+      salesData,
+      searchData,
+      offlineData,
+      offlineChartData,
+      salesTypeData,
+      salesTypeDataOnline,
+      salesTypeDataOffline,
+    } = dashboardAndanalysis;
+    let salesPieData;
+
+    if (salesType === 'all') {
+      salesPieData = salesTypeData;
+    } else {
+      salesPieData = salesType === 'online' ? salesTypeDataOnline : salesTypeDataOffline;
+    }
+
+    const menu = (
+      <Menu>
+        <Menu.Item>操作一</Menu.Item>
+        <Menu.Item>操作二</Menu.Item>
+      </Menu>
+    );
+    const dropdownGroup = (
+      <span className={styles.iconGroup}>
+        <Dropdown overlay={menu} placement="bottomRight">
+          <EllipsisOutlined />
+        </Dropdown>
+      </span>
+    );
+    const activeKey = currentTabKey || (offlineData[0] && offlineData[0].name);
+    return (
+      <GridContent>
+        <React.Fragment>
+          <SalesCard
+            rangePickerValue={rangePickerValue}
+            salesData={salesData}
+            isActive={this.isActive}
+            handleRangePickerChange={this.handleRangePickerChange}
+            loading={loading}
+            selectDate={this.selectDate}
+          />
+          <ProportionSales
+            dropdownGroup={dropdownGroup}
+            salesType={salesType}
+            loading={loading}
+            salesPieData={salesPieData}
+            handleChangeSalesType={this.handleChangeSalesType}
+          />
+        </React.Fragment>
+      </GridContent>
+    );
+  }
+}
+
+export default connect(({ dashboardAndanalysis, loading }) => ({
+  dashboardAndanalysis,
+  loading: loading.effects['dashboardAndanalysis/fetch'],
+}))(Analysis);

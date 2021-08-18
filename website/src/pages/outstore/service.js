@@ -22,6 +22,11 @@ export async function queryIntermediary(params) {
     params,
   });
 }
+export async function queryMonth(params) {
+  return request(url + 'month', {
+    params,
+  });
+}
 export async function remove(params) {
   return request(url, {
     method: 'POST',

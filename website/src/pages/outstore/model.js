@@ -1,4 +1,4 @@
-import { add, remove, update, queryTruck, querySteelPlant, queryIntermediary } from './service';
+import { add, remove, update, queryTruck, querySteelPlant, queryIntermediary,queryMonth } from './service';
 const OutstoreModel = {
   namespace: 'outstore',
   state: {
@@ -10,6 +10,7 @@ const OutstoreModel = {
     options_steel_plant: [],
     options_truck: [],
     options_intermediary: [],
+    month: { weight: 0, paid: 0 },
   },
   reducers: {
     setVisibleCreateForm(state, { payload }) {
@@ -47,6 +48,17 @@ const OutstoreModel = {
 
       return { ...state, options_intermediary: options };
     },
+    setMonth(state, { payload: { data } }) {
+      console.log(data);
+      let weight = 0;
+      let paid = 0;
+      data.forEach((item) => {
+        weight += item.legal_weight_own;
+        paid += item.actual_payment;
+      });
+      console.log(weight,paid);
+      return { ...state, month: { weight, paid } };
+    },
   },
   effects: {
     *fetchTruck({ payload }, { call, put }) {
@@ -71,6 +83,10 @@ const OutstoreModel = {
         type: 'setOptionsIntermediary',
         payload: response ? response.data : [],
       });
+    },
+    *fetchMonth({ payload }, { call, put }) {
+      const response = yield call(queryMonth);
+      yield put({ type: 'setMonth', payload: response });
     },
     *submit({ payload }, { call, put }) {
       if (payload.id) {
