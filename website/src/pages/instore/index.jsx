@@ -36,31 +36,48 @@ const Index = (props) => {
   } = props;
   const columns = [
     {
-      title: '净重（公斤）',
-      dataIndex: 'legal_weight',
-      sorter: true,
+      title: '备注',
+      dataIndex: 'remark',
+      hideInTable: status !== 'un_pay',
       render: (dom, entity) => {
-        return <div style={{ fontSize: '20px' }}>{dom}</div>;
+        return <div style={{ fontSize: '24px' }}>{dom}</div>;
       },
     },
     {
-      title: '价格（元/公斤）',
-      dataIndex: 'legal_prise',
+      title: '净重',
+      dataIndex: 'legal_weight',
       sorter: true,
       render: (dom, entity) => {
-        return <div style={{ fontSize: '20px' }}>{dom}</div>;
+        return <div style={{ fontSize: '20px' }}>{dom} 公斤</div>;
+      },
+    },
+    {
+      title: '价格',
+      dataIndex: 'legal_prise',
+      hideInTable: status === 'un_pay',
+      sorter: true,
+      render: (dom, entity) => {
+        return <div style={{ fontSize: '20px' }}>{dom} 元/公斤</div>;
       },
     },
     {
       title: '金额',
       dataIndex: 'account_payable',
+      sorter: true,
       render: (dom, entity) => {
-        return <div style={{ fontSize: '24px' }}>{dom} 元</div>;
+        return (
+          <div
+            style={{ color: entity.status === 'un_pay' ? '#FF4000' : '#FFBF00', fontSize: '24px' }}
+          >
+            {dom} 元
+          </div>
+        );
       },
     },
     {
       title: '状态',
       dataIndex: 'status',
+      hideInTable: true,
       sorter: true,
       hideInForm: true,
       render: (value, record) => {

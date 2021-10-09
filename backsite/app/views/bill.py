@@ -3,9 +3,9 @@ import json
 from datetime import datetime
 from django.http import HttpResponse
 from django.http.response import JsonResponse
-from ..models.bill import Bill
-from .serializer import BillSerializer
-from .service import query
+from app.models.bill import Bill
+from app.utils.serializer import BillSerializer
+from app.service.service import query
 
 
 def action(request):

@@ -1,4 +1,6 @@
 from django.db import models
+
+from .goods import Goods
 from .steel_plant import SteelPlant
 from .truck import Truck
 from .intermediary import Intermediary
@@ -8,6 +10,7 @@ class WeightMemoOut(models.Model):
     intermediary = models.ForeignKey(Intermediary, on_delete=models.CASCADE)  # 中间人
     steel_plant = models.ForeignKey(SteelPlant, on_delete=models.CASCADE)  # 钢厂
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE)  # 货车
+    goods = models.ForeignKey(Goods, on_delete=models.CASCADE, null=True, blank=True)  # 货物
     gross_weight_own = models.FloatField(null=True, blank=True)  # 己方毛重
     gross_weight_opposite = models.FloatField(null=True, blank=True)  # 对方毛重
     body_weight_own = models.FloatField(null=True, blank=True)  # 己方皮重
@@ -17,6 +20,9 @@ class WeightMemoOut(models.Model):
     legal_weight_own_text = models.CharField(max_length=100, null=True, blank=True)  # 己方净重
     legal_weight_opposite = models.FloatField(null=True, blank=True)  # 对方净重
     legal_weight_opposite_text = models.CharField(max_length=100, null=True, blank=True)  # 对方净重
+    in_prise = models.IntegerField(null=True, blank=True)  # 购入价格
+    profit_prise = models.IntegerField(null=True, blank=True)  # 价格利润
+    profit = models.IntegerField(null=True, blank=True)  # 利润
     agreed_prise = models.IntegerField(null=True, blank=True)  # 商定价格
     actual_prise = models.IntegerField(null=True, blank=True)  # 对方价格
     expected_payment = models.IntegerField(null=True, blank=True)  # 预期金额

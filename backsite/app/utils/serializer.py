@@ -1,12 +1,13 @@
 from rest_framework import serializers
-from ..models.steel_plant import SteelPlant
-from ..models.intermediary import Intermediary
-from ..models.payment import Payment
-from ..models.truck import Truck
-from ..models.weight_memo_in import WeightMemoIn
-from ..models.weight_memo_out import WeightMemoOut
-from ..models.bill import Bill
-from ..models.user import User
+from app.models.steel_plant import SteelPlant
+from app.models.intermediary import Intermediary
+from app.models.payment import Payment
+from app.models.truck import Truck
+from app.models.weight_memo_in import WeightMemoIn
+from app.models.weight_memo_out import WeightMemoOut
+from app.models.bill import Bill
+from app.models.user import User
+from app.models.goods import Goods
 
 
 class IntermediarySerializer(serializers.ModelSerializer):
@@ -24,6 +25,12 @@ class PaymentSerializer(serializers.ModelSerializer):
 class TruckSerializer(serializers.ModelSerializer):
     class Meta:  # 写一个内部类
         model = Truck  # 该序列化类跟哪个表建立关系
+        fields = '__all__'  # 序列化全部字段
+
+
+class GoodsSerializer(serializers.ModelSerializer):
+    class Meta:  # 写一个内部类
+        model = Goods  # 该序列化类跟哪个表建立关系
         fields = '__all__'  # 序列化全部字段
 
 

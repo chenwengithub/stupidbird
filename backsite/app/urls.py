@@ -1,9 +1,8 @@
 from django.urls import path
 
-from .views import views, intermediary, payment, steel_plant, truck, weight_memo_out, weight_memo_in, bill
+from .views import steel_plant, truck, weight_memo_out, weight_memo_in, payment, bill, intermediary, camera
 
 urlpatterns = [
-    path('', views.index, name='index'),
     path('api/steel_plant/', steel_plant.action),
     path('api/truck/', truck.action),
     path('api/intermediary/', intermediary.action),
@@ -18,4 +17,5 @@ urlpatterns = [
     path('api/weight_memo_in/date_range', weight_memo_in.find_date_range),
     path('api/weight_memo_in/month', weight_memo_in.find_month),
     path('api/weight_memo_out/month', weight_memo_out.find_month),
+    path('api/camera/', camera.action),
 ]

@@ -3,10 +3,13 @@ from django.views.decorators.csrf import csrf_exempt
 from datetime import date, datetime
 from django.http import HttpResponse
 from django.http.response import JsonResponse
+
+from ..models import Goods
 from ..models.weight_memo_in import WeightMemoIn
 from ..models.payment import Payment
-from .serializer import WeightMemoInSerializer
-from .service import query
+from app.utils.serializer import WeightMemoInSerializer
+from app.service.service import query
+from ..service.camera import catch
 
 
 @csrf_exempt
@@ -68,6 +71,8 @@ def add(data):
                 for k, v in data['payment'].items():
                     if v:
                         setattr(payment, k, int(v))
+            elif key == 'goods':
+                setattr(obj, key, Goods.objects.get(pk=value))
             else:
                 setattr(obj, key, value)
     if obj.body_weight:
@@ -86,6 +91,8 @@ def add(data):
         payment.save()
         obj.payment = payment
     obj.save()
+    if not obj.body_weight:
+        catch(str(obj.id) + '_gross', 'memoin')
     return JsonResponse(WeightMemoInSerializer(instance=obj).data, safe=False)
 
 
@@ -96,6 +103,14 @@ def remove(key):
 
 def update(key, data):
     obj = WeightMemoIn.objects.get(id=key)
+    if (not data['body_weight']) & (str(data['gross_weight']) != str(obj.gross_weight)):
+        catch(str(obj.id) + '_gross', 'memoin')
+        # 修改了毛重
+    elif data['body_weight']:
+        if str(data['gross_weight']) == str(obj.gross_weight):
+            if str(data['body_weight']) != str(obj.body_weight):
+                # 修改皮重
+                catch(str(obj.id) + '_body', 'memoin')
     for key, value in data.items():
         if value:
             if key in ['gross_weight', 'body_weight', 'deduct_weight', 'actual_payment']:
@@ -104,6 +119,8 @@ def update(key, data):
             elif key == 'legal_prise':
                 if value:
                     setattr(obj, key, float(value))
+            elif key == 'goods':
+                setattr(obj, key, Goods.objects.get(pk=value))
             elif key == 'payment':
                 payment = Payment(createDateTime=datetime.now().strftime('%Y-%m-%d %H:%M:%S'), remark='')
                 for k, v in value.items():
@@ -111,8 +128,7 @@ def update(key, data):
                         setattr(payment, k, int(v))
                 payment.save()
             else:
-                if value:
-                    setattr(obj, key, value)
+                setattr(obj, key, value)
     if obj.body_weight:
         legal_weight = obj.gross_weight - obj.body_weight - (obj.deduct_weight or 0)
         account_payable = legal_weight * obj.legal_prise

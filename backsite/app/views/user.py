@@ -3,8 +3,8 @@ import json
 from datetime import datetime
 from django.http import HttpResponse
 from ..models.user import User
-from .serializer import UserSerializer
-from .service import query
+from app.utils.serializer import UserSerializer
+from app.service.service import query
 
 
 def action(request):

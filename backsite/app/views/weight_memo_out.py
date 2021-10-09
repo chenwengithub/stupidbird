@@ -3,12 +3,15 @@ from django.views.decorators.csrf import csrf_exempt
 from datetime import date, datetime
 from django.http import HttpResponse
 from django.http.response import JsonResponse
+
+from ..models import Goods
 from ..models.weight_memo_out import WeightMemoOut
 from ..models.truck import Truck
 from ..models.steel_plant import SteelPlant
 from ..models.intermediary import Intermediary
-from .serializer import WeightMemoOutSerializer
-from .service import query
+from app.utils.serializer import WeightMemoOutSerializer
+from app.service.service import query
+from ..service.camera import catch
 
 
 @csrf_exempt
@@ -50,6 +53,8 @@ def add(data):
                 setattr(obj, key, float(value))
             elif key == 'truck':
                 setattr(obj, key, Truck.objects.get(pk=value))
+            elif key == 'goods':
+                setattr(obj, key, Goods.objects.get(pk=value))
             elif key == 'steel_plant':
                 setattr(obj, key, SteelPlant.objects.get(pk=value))
             elif key == 'intermediary':
@@ -68,6 +73,8 @@ def add(data):
     else:
         setattr(obj, 'status', 'new')
     obj.save()
+    if not obj.gross_weight_own:
+        catch(str(obj.id) + '_body', 'memoout')
     return JsonResponse(WeightMemoOutSerializer(instance=obj).data, safe=False)
 
 
@@ -78,6 +85,14 @@ def remove(key):
 
 def update(key, data):
     obj = WeightMemoOut.objects.get(pk=key)
+    if (not data['gross_weight_own']) & (str(data['body_weight_own']) != str(obj.body_weight_own)):
+        catch(str(obj.id) + '_body', 'memoout')
+        # 修改了皮重
+    elif data['gross_weight_own']:
+        if int(data['body_weight_own']*1000) == int(obj.body_weight_own*1000):
+            if str(data['gross_weight_own']) != str(obj.gross_weight_own):
+                # 修改毛重
+                catch(str(obj.id) + '_gross', 'memoout')
     for key, value in data.items():
         if value:
             if key in ['agreed_prise', 'actual_prise', 'expected_payment', 'opposite_payment', 'advance_payment',
@@ -89,6 +104,8 @@ def update(key, data):
                 setattr(obj, key, float(value))
             elif key == 'truck':
                 setattr(obj, key, Truck.objects.get(pk=value))
+            elif key == 'goods':
+                setattr(obj, key, Goods.objects.get(pk=value))
             elif key == 'steel_plant':
                 setattr(obj, key, SteelPlant.objects.get(pk=value))
             elif key == 'intermediary':

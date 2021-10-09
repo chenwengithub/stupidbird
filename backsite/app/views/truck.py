@@ -4,8 +4,8 @@ from datetime import datetime
 from django.http import HttpResponse
 from django.http.response import JsonResponse
 from ..models.truck import Truck
-from .serializer import TruckSerializer
-from .service import query
+from app.utils.serializer import TruckSerializer
+from app.service.service import query
 
 
 def action(request):

@@ -3,9 +3,9 @@ import json
 from datetime import datetime
 from django.http import HttpResponse
 from django.http.response import JsonResponse
-from ..models.intermediary import Intermediary
-from .serializer import IntermediarySerializer
-from .service import query
+from app.models.intermediary import Intermediary
+from app.utils.serializer import IntermediarySerializer
+from app.service.service import query
 
 
 def action(request):

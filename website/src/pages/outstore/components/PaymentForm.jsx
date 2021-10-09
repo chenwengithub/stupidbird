@@ -104,8 +104,9 @@ const PaymentForm = (props) => {
         hidden={current && !current.expected_payment}
         color="red"
       >
-        总额：{current && current.expected_payment} 元， 剩余：
-        {rest} 元
+        总额：{current && current.expected_payment} 元
+        {/* ， 剩余：
+        {rest} 元 */}
       </Tag>
       <Form
         key={current && current.id}

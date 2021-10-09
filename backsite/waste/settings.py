@@ -90,7 +90,7 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'stupidbird',
+        'NAME': 'stupidbird1',
         'USER': 'root',
         'PASSWORD': 'chenwen',
         'HOST': '127.0.0.1',

@@ -40,7 +40,6 @@ const Index = (props) => {
                 <Tag className={styles.error} color="#f50">
                   摄像头异常×
                 </Tag>
-                <input type="button" value="Print" onclick="window.print()" />
               </div>
             </div>
             <Card bordered={false} className={styles.body}>
@@ -62,17 +61,17 @@ const Index = (props) => {
                   </p>
                 </Col>
               </Row>
-              <p style={{ fontSize: '30px' }}>等待过磅</p>
               <Row>
                 <Col span={24}>
                   <Card
-                    style={{ margin: 20 }}
+                    style={{ margin: '20px 0'}}
                     hoverable
                     onClick={() => {
                       dispatch(setVisibleGW(true));
                     }}
                   >
-                    <img src={image_car} style={{ width: 80, height: 80 }} />
+                      <img src={image_car} style={{ width: 80, height: 80 }} />
+                      <p style={{ fontSize: '30px' }}>点击过磅</p>
                   </Card>
                 </Col>
               </Row>

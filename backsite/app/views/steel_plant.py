@@ -3,9 +3,11 @@ import json
 from datetime import datetime
 from django.http import HttpResponse
 from django.http.response import JsonResponse
+
+from ..models import Goods
 from ..models.steel_plant import SteelPlant
-from .serializer import SteelPlantSerializer
-from .service import query
+from app.utils.serializer import SteelPlantSerializer
+from app.service.service import query
 
 
 def action(request):
@@ -27,7 +29,12 @@ def find(request):
 
 
 def add(data):
-    data = SteelPlant(name=data['name'], address=data['address'], remark=data['remark'], createDateTime=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    obj = SteelPlant(createDateTime=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    for key, value in data.items():
+        if key == 'goods':
+            setattr(obj, key, Goods.objects.get(pk=value))
+        else:
+            setattr(obj, key, value)
     data.save()
     return HttpResponse('success')
 
@@ -39,8 +46,10 @@ def remove(key):
 
 def update(key, data):
     obj = SteelPlant.objects.get(id=key)
-    obj.name = data['name']
-    obj.address = data['address']
-    obj.remark = data['remark']
-    obj.save()
+    for key, value in data.items():
+        if key == 'goods':
+            setattr(obj, key, Goods.objects.get(pk=value))
+        else:
+            setattr(obj, key, value)
+    data.save()
     return HttpResponse('success')
