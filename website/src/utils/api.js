@@ -8,6 +8,7 @@ const api = {
   weighinstore: url + 'weight_memo_in/',
   weighoutstore: url + 'weight_memo_out/',
   bill: url + 'bill/',
+  camera: url + 'camera/',
 };
 
 export default api;

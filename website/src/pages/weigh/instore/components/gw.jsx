@@ -67,7 +67,7 @@ const GW = (props) => {
           form.submit();
         }}
       >
-        <Tag
+        {/* <Tag
           style={{
             textAlign: 'center',
             lineHeight: '64px',
@@ -78,7 +78,7 @@ const GW = (props) => {
           color="#d9363e"
         >
           磅显：{grossWeight} kg
-        </Tag>
+        </Tag> */}
         <Form form={form} name="basic" onFinish={onFinish} onFinishFailed={onFinishFailed}>
           <div className={styles.form}>
             <Form.Item name="gross_weight" rules={[rules.int, rules.required]}>
